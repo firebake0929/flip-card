@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#174d3a" />
+    <meta name="description" content="東華臺灣文化系 9/8 直屬抽籤翻牌網站" />
+    <title>東華臺灣文化系｜直屬抽籤</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <main class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">NDHU・TAIWANESE CULTURES</p>
+        <h1>直屬抽籤</h1>
+        <p class="date"><span></span> 9 月 8 日・相遇的日子 <span></span></p>
+      </header>
+
+      <section class="draw-area" aria-labelledby="draw-heading">
+        <h2 id="draw-heading" class="sr-only">翻牌抽出你的直屬</h2>
+        <p id="instruction" class="instruction">輕觸卡片，看看誰在另一面等你</p>
+
+        <button id="card" class="card" type="button" aria-label="翻牌抽出直屬" aria-live="polite">
+          <span class="card-inner">
+            <span class="card-face card-front">
+              <span class="corner-mark top">臺</span>
+              <span class="landscape" aria-hidden="true">
+                <span class="sun"></span>
+                <span class="mountain mountain-back"></span>
+                <span class="mountain mountain-front"></span>
+                <span class="river"></span>
+              </span>
+              <span class="front-copy">
+                <small>國立東華大學</small>
+                <strong>臺灣文化學系</strong>
+              </span>
+              <span class="corner-mark bottom">文</span>
+            </span>
+
+            <span class="card-face card-back">
+              <span class="result-label">你的直屬是</span>
+              <strong id="seniorName" class="senior-name">—</strong>
+              <span class="blessing">願我們在山海之間，相遇成為彼此的風景。</span>
+              <span class="seal" aria-hidden="true">緣</span>
+            </span>
+          </span>
+        </button>
+
+        <button id="drawAgain" class="draw-again" type="button" hidden>
+          <span aria-hidden="true">↻</span> 再抽一張
+        </button>
+        <p id="remaining" class="remaining"></p>
+      </section>
+
+      <footer>
+        <p>國立東華大學・臺灣文化學系</p>
+        <button id="resetDeck" class="reset-link" type="button">重置所有抽籤紀錄</button>
+      </footer>
+    </main>
+
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
