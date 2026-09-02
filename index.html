@@ -1,68 +1,76 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-Hant">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#174d3a" />
-    <meta name="description" content="東華臺灣文化系 9/8 直屬抽籤翻牌網站" />
-    <title>東華臺灣文化系｜直屬抽籤</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div class="grain" aria-hidden="true"></div>
-    <main class="page-shell">
-      <header class="hero">
-        <p class="eyebrow">NDHU・TAIWANESE CULTURES</p>
-        <h1>直屬抽籤</h1>
-        <p class="date"><span></span> 9 月 8 日・相遇的日子 <span></span></p>
-      </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>翻牌遊戲</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #f3f1eb; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #292929; display: flex; flex-direction: column; align-items: center; padding: 36px 24px; }
+    h1 { margin: 0 0 8px; font-size: 28px; letter-spacing: 2px; }
+    .hint { margin: 0 0 28px; color: #777; font-size: 14px; }
+    .game-board { width: min(1200px, 100%); display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; }
+    .card { aspect-ratio: 1 / 1.15; perspective: 800px; cursor: pointer; user-select: none; }
+    .card.disabled { cursor: default; }
+    .card-inner { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.45s ease; }
+    .card.flipped .card-inner { transform: rotateY(180deg); }
+    .card-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 12px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px; font-weight: 700; font-size: clamp(13px, 1.4vw, 19px); box-shadow: 0 3px 8px rgba(0,0,0,.12), inset 0 0 0 1px rgba(255,255,255,.35); }
+    .card-front { background: #fff; color: #292929; }
+    .card-back { background: #555; color: #fff; transform: rotateY(180deg); }
+    .card.disabled .card-front, .card.disabled .card-back { background: #888; }
+    .card.disabled .card-inner { opacity: .82; }
+    .card:not(.disabled):hover .card-inner { transform: translateY(-4px); }
+    .card:not(.disabled):active .card-inner { transform: translateY(0); }
+    .counter { margin-top: 22px; padding: 8px 16px; border-radius: 999px; background: #fff; color: #666; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
+    .reset { margin-top: 14px; padding: 8px 18px; border: 0; border-radius: 8px; background: #292929; color: #fff; font-size: 14px; cursor: pointer; }
+    .reset:hover { background: #444; }
+    @media (max-width: 900px) { .game-board { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 500px) { body { padding: 20px 12px; } h1 { font-size: 22px; } .game-board { grid-template-columns: repeat(4, 1fr); gap: 7px; } .card-face { border-radius: 7px; padding: 5px; font-size: 11px; } }
+  </style>
+</head>
+<body>
+  <h1>翻牌遊戲</h1>
+  <p class="hint">點擊卡牌，看看背後藏著誰</p>
+  <div class="game-board" id="gameBoard"></div>
+  <div class="counter" id="counter">已翻牌 0 / 32</div>
+  <button class="reset" id="resetButton">重新開始</button>
+  <script>
+    const cards = [
+      ["落日飛車", "王意義"], ["瑪丁娜", "陳以內"], ["排球少年", "陳皇后"], ["底片相機", "往小器"],
+      ["爬山", "摩割愛"], ["MINECRAFT", "致癌"], ["貓派", "跟餐廳"], ["STRAY KIDS", "窩窩頭"],
+      ["0050", "外圍賽"], ["老花眼鏡", "欸公園"], ["素食者", "看才能"], ["花蓮飆仔", "酷哦許"],
+      ["中山逛街", "與合作"], ["戀愛腦", "卡關"], ["時光二手書店", "與口感"], ["BL", "誒褲子"],
+      ["富邦悍將", "王令麟"], ["扭蛋", "新份額"], ["肉圓加辣", "吳尊"], ["A321", "嗷嗷家"],
+      ["DUA LIPA", "恩情噢"], ["睡覺", "岑哥"], ["女性主義", "歐氣欸"], ["芒果醬", "內能"],
+      ["ONE OK ROCK", "紅通通"], ["忍者哈特利", "你你"], ["西班牙", "誒像欸"], ["哈利波特", "鷗科欸"],
+      ["台積電", "好誒哈"], ["總鋪師", "坤坤"], ["獵人", "嗯九"], ["福岡軟銀鷹", "邊堀"]
+    ];
+    const board = document.getElementById("gameBoard");
+    const counter = document.getElementById("counter");
+    const resetButton = document.getElementById("resetButton");
+    let flippedCount = 0;
 
-      <section class="draw-area" aria-labelledby="draw-heading">
-        <h2 id="draw-heading" class="sr-only">翻牌抽出你的直屬</h2>
-        <p id="instruction" class="instruction">輕觸卡片，看看誰在另一面等你</p>
+    function createCards() {
+      board.innerHTML = "";
+      flippedCount = 0;
+      updateCounter();
+      cards.forEach(([frontText, backText]) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `<div class="card-inner"><div class="card-face card-front">${frontText}</div><div class="card-face card-back">${backText}</div></div>`;
+        card.addEventListener("click", () => {
+          if (card.classList.contains("disabled")) return;
+          card.classList.add("flipped", "disabled");
+          flippedCount++;
+          updateCounter();
+        });
+        board.appendChild(card);
+      });
+    }
 
-        <button id="card" class="card" type="button" aria-label="翻牌抽出直屬" aria-live="polite">
-          <span class="card-inner">
-            <span class="card-face card-front">
-              <span class="corner-mark top">臺</span>
-              <span class="landscape" aria-hidden="true">
-                <span class="sun"></span>
-                <span class="mountain mountain-back"></span>
-                <span class="mountain mountain-front"></span>
-                <span class="river"></span>
-              </span>
-              <span class="front-copy">
-                <small>國立東華大學</small>
-                <strong>臺灣文化學系</strong>
-              </span>
-              <span class="corner-mark bottom">文</span>
-            </span>
-
-            <span class="card-face card-back">
-              <span class="result-label">你的直屬是</span>
-              <strong id="seniorName" class="senior-name">—</strong>
-              <span class="blessing">願我們在山海之間，相遇成為彼此的風景。</span>
-              <span class="seal" aria-hidden="true">緣</span>
-            </span>
-          </span>
-        </button>
-
-        <button id="drawAgain" class="draw-again" type="button" hidden>
-          <span aria-hidden="true">↻</span> 再抽一張
-        </button>
-        <p id="remaining" class="remaining"></p>
-      </section>
-
-      <footer>
-        <p>國立東華大學・臺灣文化學系</p>
-        <button id="resetDeck" class="reset-link" type="button">重置所有抽籤紀錄</button>
-      </footer>
-    </main>
-
-    <div id="confetti" class="confetti" aria-hidden="true"></div>
-    <script src="script.js"></script>
-  </body>
+    function updateCounter() { counter.textContent = `已翻牌 ${flippedCount} / ${cards.length}`; }
+    resetButton.addEventListener("click", createCards);
+    createCards();
+  </script>
+</body>
 </html>
