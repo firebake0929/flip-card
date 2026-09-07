@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>翻牌遊戲</title>
+  <title>臺灣文化學系抽直屬</title>
   <style>
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100vh; background: #f3f1eb; font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #292929; display: flex; flex-direction: column; align-items: center; padding: 36px 24px; }
@@ -23,16 +23,18 @@
     .counter { margin-top: 22px; padding: 8px 16px; border-radius: 999px; background: #fff; color: #666; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.08); }
     .reset { margin-top: 14px; padding: 8px 18px; border: 0; border-radius: 8px; background: #292929; color: #fff; font-size: 14px; cursor: pointer; }
     .reset:hover { background: #444; }
+    .sponsor-credit { position: fixed; left: 14px; bottom: 12px; z-index: 10; padding: 6px 9px; border-radius: 6px; background: rgba(255,255,255,.86); color: #666; font-size: 11px; line-height: 1.4; box-shadow: 0 1px 5px rgba(0,0,0,.08); pointer-events: none; }
     @media (max-width: 900px) { .game-board { grid-template-columns: repeat(4, 1fr); } }
-    @media (max-width: 500px) { body { padding: 20px 12px; } h1 { font-size: 22px; } .game-board { grid-template-columns: repeat(4, 1fr); gap: 7px; } .card-face { border-radius: 7px; padding: 5px; font-size: 11px; } }
+    @media (max-width: 500px) { body { padding: 20px 12px 60px; } h1 { font-size: 22px; } .game-board { grid-template-columns: repeat(4, 1fr); gap: 7px; } .card-face { border-radius: 7px; padding: 5px; font-size: 11px; } .sponsor-credit { left: 8px; bottom: 8px; font-size: 10px; } }
   </style>
 </head>
 <body>
-  <h1>翻牌遊戲</h1>
+  <h1>臺灣文化學系抽直屬</h1>
   <p class="hint">點擊卡牌，看看背後藏著誰</p>
   <div class="game-board" id="gameBoard"></div>
   <div class="counter" id="counter">已翻牌 0 / 32</div>
   <button class="reset" id="resetButton">重新開始</button>
+  <div class="sponsor-credit">感謝許韶元贊助Codex額度</div>
   <script>
     const cards = [
       ["Uber", "大二 邱晨妤"], ["海獅", "大二 曾郁智"], ["Once", "大三 徐宇慶"], ["恐龍", "大二 李子瑜"],
